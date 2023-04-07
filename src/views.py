@@ -1,10 +1,11 @@
 from django.shortcuts import render
-
+from django.contrib.auth.models import User
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'home.html')
+    users = User.objects.all()
+    return render(request, 'home.html', {'users': users})
 
 
 def detail(request):

@@ -1,23 +1,61 @@
-{% extends 'base.html' %} 
-{% block content %}
-<div class="hero min-h-screen bg-base-200">
-  <div class="hero-content flex-col lg:flex-row">
-    <img
-      src="http://unsplash.it/g/200/200?random&gravity=center"
-      class="max-w-sm rounded-lg shadow-2xl"
-    />
-    <div>
-      <h1 class="text-5xl font-bold">Box Office News!</h1>
-      <p class="py-6">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-        excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a
-        id nisi.
+{% extends 'base.html' %} {% block content %}
+<div class="max-w-[1200px] mx-auto px-2 py-10">
+  <h1 class="font-bold text-xl">Feature .....</h1>
+  <div class="mt-4 flex md:flex-row flex-col gap-x-4">
+    <div class="space-y-2 flex-1">
+      <img
+        class="w-full aspect-video"
+        src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+        alt=""
+      />
+      <p class="text-primary-focus uppercase text-sm">Jun 12 2023</p>
+      <h2 class="font-bold text-lg">Tên blog</h2>
+      <p class="text-primary-focus">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam nesciunt
+        labore ipsum esse alias maxime optio vero incidunt? Porro ipsam possimus
+        excepturi magni repellendus, magnam ipsa natus harum neque repellat.
       </p>
-      <a href="{% url 'login' %}">
-        <button class="btn btn-primary">Get Started</button>
-
-      </a>
-
+    </div>
+    <div class="space-y-2 flex-1">
+      <div
+        class="flex items-center pb-2 border-b border-primary-content last:border-none"
+      >
+        <img
+          class="w-[200px] aspect-video"
+          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+          alt=""
+        />
+        <div class="ml-2">
+          <p class="text-sm uppercase text-primary-focus">Jun 12 2023</p>
+          <h2 class="font-bold text-lg">Tên blog....</h2>
+        </div>
+      </div>
+      <div
+        class="flex items-center pb-2 border-b border-primary-content last:border-none"
+      >
+        <img
+          class="w-[200px] aspect-video"
+          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+          alt=""
+        />
+        <div class="ml-2">
+          <p>Jun 12 2023</p>
+          <h2>Tên blog....</h2>
+        </div>
+      </div>
+      <div
+        class="flex items-center pb-2 border-b border-primary-content last:border-none"
+      >
+        <img
+          class="w-[200px] aspect-video"
+          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+          alt=""
+        />
+        <div class="ml-2">
+          <p>Jun 12 2023</p>
+          <h2>Tên blog....</h2>
+        </div>
+      </div>
     </div>
   </div>
 </div>
