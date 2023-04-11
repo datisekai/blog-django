@@ -19,3 +19,13 @@ class Blog(models.Model):
     def __str__(self) -> str:
         return "Name=" + self.name
     
+    class Meta:
+        permissions = [
+            ("view_my_posts","Can view your posts")
+        ]
+
+
+class Statistical(models.Model):
+    class Meta:
+        managed = False
+        verbose_name_plural = "Statisticals"
