@@ -11,7 +11,8 @@ def home(request):
 
 
 def search(request):
-    return render(request, 'search.html')
+    query = request.GET.get('q')
+    return render(request, 'search.html',{"query":query})
 
 
 def detail(request):
