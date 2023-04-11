@@ -1,55 +1,91 @@
+<style>
+  
+#search-box{
+    animation: ease-in slideTopToBottom 0.3s;
+}
+
+@keyframes slideTopToBottom{
+    from{
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+</style>
+
 <div
-  class="flex items-center justify-between border-b-[4px] py-2 border-primary-content mx-auto max-w-[1200px] w-full px-2"
+  class="flex items-center justify-between border-b-2 py-2 border-base-100 mx-auto max-w-[1200px] w-full px-2"
 >
   <div class="flex items-center space-x-4">
-    <!-- <div class="avatar">
-      <div class="w-12 rounded-full">
-        <img
-          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-        />
-      </div>
-    </div> -->
-    
     <!-- {% for item in users %}
       <h1>{{ item }}</h1> -->
     <!-- {% endfor %} -->
-      
-    <a href="/admin/login">
-      <button class="btn btn-primary">Login</button>
-    </a>
 
-    <div class="space-x-6 flex items-center">
-      <h1
-        class="uppercase text-primary text-md hover:text-primary-content cursor-pointer"
-      >
-        Learn
-      </h1>
-      <h1
-        class="uppercase text-primary text-md hover:text-primary-content cursor-pointer text-primary-content cursor-pointer"
-      >
-        Blog
-      </h1>
-      <h1
-        class="uppercase text-primary text-md hover:text-primary-content cursor-pointer"
-      >
-        Learn
-      </h1>
+    {% if user.is_authenticated %}
+    <div class="avatar">
+      <div class="w-12 rounded-full">
+        <img
+          src="https://ui-avatars.com/api/?name={{user.first_name}}+{{user.last_name}}"
+        />
+      </div>
+    </div>
+    {% else %}
+    <a href="/admin/login">
+      <button class="btn btn-primary text-base-100">Login</button>
+    </a>
+    {% endif %}
+
+    <div id="category" class="space-x-6 flex items-center">
+      <div>Loading...</div>
     </div>
   </div>
-  <div>
+  <div class="flex items-center space-x-2">
+    <button id="btn-search" class="btn btn-circle btn-primary">
+      <i class="text-md md:text-lg fa-solid fa-magnifying-glass"></i>
+    </button>
     <select
       id="navbar-menu"
-      class="select capitalize select-primary w-full max-w-xs"
+      class="select capitalize select-primary max-w-xs"
     ></select>
+  </div>
+
+  <div
+    id="search-box"
+    class="fixed hidden bg-primary px-5 pt-2 pb-4 shadow-md rounded-box w-[80%] md:w-[400px] top-[5%] left-[50%] translate-x-[-50%]"
+  >
+    <div class="relative">
+      <div class="form-control w-full max-w-md">
+        <label class="label">
+          <span class="label-text text-base-100"
+            >What is the blog name you want to find?</span
+          >
+          <span
+          id="search-box-close"
+            class="btn btn-xs btn-circle btn-base-100 absoluted top-0 right-0"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </span>
+        </label>
+        <input
+          type="text"
+          placeholder="Type here"
+          class="input input-bordered w-full max-w-md"
+        />
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
   const themes = [
+    "bumblebee",
+    "wireframe",
     "light",
     "dark",
     "cupcake",
-    "bumblebee",
     "emerald",
     "corporate",
     "synthwave",
@@ -63,7 +99,6 @@
     "lofi",
     "pastel",
     "fantasy",
-    "wireframe",
     "black",
     "luxury",
     "dracula",
@@ -78,13 +113,70 @@
   ];
   const navbarMenu = document.getElementById("navbar-menu");
   if (navbarMenu) {
+    const theme = localStorage.getItem("data-theme");
     const html = themes.map((item) => `<option>${item}</option>`);
     navbarMenu.innerHTML = html.join("");
+    const index = themes.findIndex((item) => item === theme);
+    navbarMenu.selectedIndex = index;
   }
 
   navbarMenu.onchange = (e) => {
     const theme = e.target.value;
     const documentHtml = document.querySelector("html");
-    documentHtml.setAttribute("data-theme", e.target.value);
+    documentHtml.setAttribute("data-theme", theme);
+    navbarMenu.setAttribute("value", theme);
+    localStorage.setItem("data-theme", theme);
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const theme = localStorage.getItem("data-theme");
+
+    if (theme) {
+      const documentHtml = document.querySelector("html");
+      documentHtml.setAttribute("data-theme", theme);
+      navbarMenu.setAttribute("value", theme);
+    }
+  });
+
+  const getCategories = async () => {
+    const data = await fetch("/api/category");
+    const categories = await data.json();
+    const divCategory = document.getElementById("category");
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get("category");
+
+    const html = categories.map(
+      (item) => `<a href="/search?category=${item.id}"><h1
+        class="uppercase text-md hover:text-primary cursor-pointer transition-all ${
+          category == item.id ? "text-primary" : "text-base-100"
+        }"
+      >
+        ${item.name}
+      </h1></a>`
+    );
+
+    divCategory.innerHTML = [
+      `<a href='/'><h1 class="uppercase text-md hover:text-primary cursor-pointer transition-all ${
+        !category ? "text-primary" : "text-base-100"
+      }">Home</h1></a>`,
+      ...html,
+    ].join("");
+  };
+  getCategories();
+
+  const btnSearch = document.getElementById("btn-search");
+  const boxSearch = document.getElementById("search-box");
+  const closeSearch = document.getElementById("search-box-close");
+  btnSearch.onclick = () => {
+    const display = boxSearch.style.display;
+    if (display === "block") {
+      boxSearch.style.display = "none";
+    } else {
+      boxSearch.style.display = "block";
+    }
+  };
+
+  closeSearch.onclick = () => {
+    boxSearch.style.display = "none";
   };
 </script>
