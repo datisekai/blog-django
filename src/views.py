@@ -6,13 +6,17 @@ from django.http import JsonResponse
 
 
 def home(request):
-    user = request.user 
+    user = request.user
     return render(request, 'home.html', {'user': user})
+
+
+def custom_login(request):
+    return render(request, 'admin/custom_login.html')
 
 
 def search(request):
     query = request.GET.get('q')
-    return render(request, 'search.html',{"query":query})
+    return render(request, 'search.html', {"query": query})
 
 
 def detail(request):
