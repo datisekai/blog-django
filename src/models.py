@@ -1,29 +1,48 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.utils import timezone
+
 
 # Create your models here.
 class Categories(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     def __str__(self):
-        return "Name=" + self.name + ",Description=" + self.description
+        return self.name
     
 class Blog(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     thumbnail = models.ImageField(upload_to='uploads/')
-    category = models.OneToOneField(Categories, on_delete=models.CASCADE)
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     body = RichTextUploadingField()
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
     def __str__(self) -> str:
-        return "Name=" + self.name
-    
+        return self.name
     class Meta:
         permissions = [
             ("view_my_posts","Can view your posts")
         ]
 
+class Comments(models.Model):
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return self.content
+  
+
+class Reacts(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    icon = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return self.icon
+   
 
 class Statistical(models.Model):
     class Meta:
