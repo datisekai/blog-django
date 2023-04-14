@@ -11,13 +11,14 @@ class Statisticals(admin.ModelAdmin):
         }
         return super().changelist_view(request, extra_context=context)
 
+
 class BlogAdmin(admin.ModelAdmin):
     exclude = ['author']
     def get_queryset(self, request):
         # Lọc danh sách các blog theo người dùng đăng nhập và quyền "view_my_posts"
         qs = super().get_queryset(request)
         user = request.user
-        if user.has_perm('view_my_posts'):
+        if user.has_perm('src.view_my_posts'):
             return qs.filter(author=user)
         else:
             return qs

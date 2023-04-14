@@ -1,4 +1,79 @@
 {% extends 'base.html' %} {% block content %}
-<p>detail</p>
+
+<div class="max-w-[1200px] text-base-100 mx-auto px-2 py-10">
+  <div class="leading-8">
+    <h1 class="text-lg md:text-xl">{{data.name}}</h1>
+    <p>{{data.description}}</p>
+    <p class="mt-4">{{data.html|safe}}</p>
+  </div>
+  <div class="mt-8">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg md:text-xl">Top Comment (1)</h2>
+     <div class="btn btn-primary text-base-100" title="Drag React">
+        <i class="text-2xl fa-regular fa-heart"></i>
+     </div>
+      <!-- <i class="fa-solid fa-heart"></i> -->
+    </div>
+    <div class="mt-4 flex w-full pb-2 border-b">
+      <div>
+        <div class="avatar">
+          <div class="w-10 rounded-full">
+            <img src="https://ui-avatars.com/api/?name={{user.username}}" />
+          </div>
+        </div>
+      </div>
+      <div class="ml-4 flex-1 flex items-center">
+        <input
+          type="text"
+          placeholder="Type here"
+          class="input w-full max-w-lg input-bordered input-primary text-primary-content"
+        />
+        <button class="btn btn-primary ml-2 text-base-100">SEND</button>
+      </div>
+    </div>
+    <div class="mt-4 flex w-full">
+      <div>
+        <div class="avatar">
+          <div class="w-10 rounded-full">
+            <img src="https://ui-avatars.com/api/?name={{user.username}}" />
+          </div>
+        </div>
+      </div>
+      <div class="ml-4 flex-1">
+        <div class='flex items-center'>
+            <h4 class='font-bold'>Datisekai</h4>
+            <span class='ml-4'>Apr 14</span>
+        </div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos soluta dolor quidem, dolorum repellendus enim ut adipisci ipsa, unde quod iste expedita asperiores dignissimos nam qui illum, molestias animi quaerat.</p>
+      </div>
+    </div>
+  </div>
+
+  {% if recommend_blogs|length > 0 %}
+  <div class="mt-8">
+    <h1 class="font-bold text-xl text-base-100 uppercase">Recommends</h1>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {% for blog in recommend_blogs %}
+      <div class="space-y-2">
+        <img
+          class="object-cover rounded-md w-full aspect-video"
+          src="/media/{{blog.thumbnail}}"
+          alt=""
+        />
+        <span class="text-sm text-primary-focus"
+          >{{blog.created_at|date:"M j Y"}}</span
+        >
+        <a href="/detail/{{blog.slug}}">
+          <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
+            {{blog.name}}
+          </h2></a
+        >
+        <p class="text-primary-focus line-clamp-3">{{blog.description}}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
 
 {% endblock content %}

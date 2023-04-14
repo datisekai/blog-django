@@ -1,151 +1,87 @@
 {% extends 'base.html' %} {% block content %}
 <div class="max-w-[1200px] mx-auto px-2 py-10">
+  {% if first_category %}
   <div class="border-b-2 border-base-100 pb-4">
-    <h1 class="font-bold text-xl text-base-100 uppercase">Feature</h1>
+    <h1 class="font-bold text-xl text-base-100 uppercase">
+      {{first_category.category}}
+    </h1>
+
+    {% if first_category.blogs|length > 0 %}
     <div class="mt-4 flex md:flex-row flex-col gap-x-4">
       <div class="space-y-2 flex-1">
         <img
-          class="rounded-md w-full aspect-video hover:scale-[1.01] hover:opacity-[0.8] transition-all "
-          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+          class="object-cover rounded-md w-full aspect-video hover:scale-[1.01] hover:opacity-[0.8] transition-all"
+          src="media/{{first_category.blogs.0.thumbnail}}"
           alt=""
         />
-        <p class="text-primary-focus uppercase text-sm">Jun 12 2023</p>
-        <h2 class="font-bold text-lg line-clamp-2 link link-hover text-base-100">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
-          nulla labore excepturi esse, aliquam autem repudiandae aliquid
-          assumenda! Voluptatum in explicabo, eius voluptates cumque veniam ipsa
-          nesciunt atque culpa repellendus.
-        </h2>
+        <p class="text-primary-focus uppercase text-sm">
+          {{first_category.blogs.0.created_at|date:"M j Y"}}
+        </p>
+        <a href="/detail/{{first_category.blogs.0.slug}}">
+          <h2
+            class="font-bold text-lg line-clamp-2 link link-hover text-base-100"
+          >
+            {{first_category.blogs.0.name}}
+          </h2></a
+        >
         <p class="text-primary-focus line-clamp-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam
-          nesciunt labore ipsum esse alias maxime optio vero incidunt? Porro
-          ipsam possimus excepturi magni repellendus, magnam ipsa natus harum
-          neque repellat.
+          {{first_category.blogs.0.description}}
         </p>
       </div>
+
+      {% if data_blogs.0.blogs|length > 1 %}
       <div class="space-y-2 flex-1 mt-4 md:mt-0">
+        {% for blog in data_blogs.0.blogs|slice:"1:" %}
         <div
           class="flex items-center pb-2 border-b border-primary-content last:border-none"
         >
           <img
-            class="rounded-md w-[200px] aspect-video"
-            src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+            class="object-cover rounded-md w-[200px] aspect-video"
+            src="media/{{blog.thumbnail}}"
             alt=""
           />
           <div class="ml-2">
-            <p class="text-sm uppercase text-primary-focus ">Jun 12 2023</p>
-            <h2 class="font-bold text-lg line-clamp-2 link link-hover text-base-100">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam
-              quam corporis vero et ea, quos, ratione amet voluptates magni
-              omnis nobis minima aliquid repellat repudiandae, nemo error
-              aspernatur! Dolore, neque.
-            </h2>
+            <p class="text-sm uppercase text-primary-focus">
+              {{blog.created_at|date:"M j Y"}}
+            </p>
+           <a href="/detail/{{blog.slug}}"> <h2
+            class="font-bold text-lg line-clamp-2 link link-hover text-base-100"
+          >
+            {{blog.name}}
+          </h2></a>
           </div>
         </div>
-        <div
-          class="flex items-center pb-2 border-b border-primary-content last:border-none"
-        >
-          <img
-            class="rounded-md w-[200px] aspect-video"
-            src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-            alt=""
-          />
-          <div class="ml-2">
-            <p class="text-sm uppercase text-primary-focus">Jun 12 2023</p>
-            <h2 class="font-bold text-lg line-clamp-2 link link-hover text-base-100">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam
-              quam corporis vero et ea, quos, ratione amet voluptates magni
-              omnis nobis minima aliquid repellat repudiandae, nemo error
-              aspernatur! Dolore, neque.
-            </h2>
-          </div>
-        </div>
-        <div
-          class="flex items-center pb-2 border-b border-primary-content last:border-none"
-        >
-          <img
-            class="rounded-md w-[200px] aspect-video"
-            src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-            alt=""
-          />
-          <div class="ml-2">
-            <p class="text-sm uppercase text-primary-focus">Jun 12 2023</p>
-            <h2 class="font-bold text-lg line-clamp-2 link link-hover text-base-100">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam
-              quam corporis vero et ea, quos, ratione amet voluptates magni
-              omnis nobis minima aliquid repellat repudiandae, nemo error
-              aspernatur! Dolore, neque.
-            </h2>
-          </div>
-        </div>
+        {% endfor %}
       </div>
+      {% endif %}
     </div>
+    {% endif %}
   </div>
+
+  {% endif %} {% for data in data_blogs|slice:"1:" %}
   <div class="mt-8">
-    <h1 class="font-bold text-xl text-base-100 uppercase">Feature</h1>
+    <h1 class="font-bold text-xl text-base-100 uppercase">{{data.category}}</h1>
     <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-      
+      {% for blog in data.blogs %}
       <div class="space-y-2">
         <img
-          class="rounded-md w-full aspect-video"
-          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+          class="object-cover rounded-md w-full aspect-video"
+          src="media/{{blog.thumbnail}}"
           alt=""
         />
-        <span class="text-sm text-primary-focus">Jun 12, 2022</span>
-        <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur
-          debitis omnis voluptatum optio. Ad repellendus iusto quas laudantium,
-          officia similique obcaecati dignissimos? Nemo eveniet quod quam
-          numquam nostrum, vero odit!
-        </h2>
-        <p class="text-primary-focus line-clamp-3">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam
-          officia magnam velit error fuga, eos reprehenderit nulla fugit tempora
-          eaque, unde temporibus veniam facilis ducimus alias dicta aspernatur?
-          Nulla, cum!
-        </p>
+        <span class="text-sm text-primary-focus"
+          >{{blog.created_at|date:"M j Y"}}</span
+        >
+        <a href="/detail/{{blog.slug}}">
+          <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
+            {{blog.name}}
+          </h2></a
+        >
+        <p class="text-primary-focus line-clamp-3">{{blog.description}}</p>
       </div>
-      <div class="space-y-2">
-        <img
-          class="rounded-md w-full aspect-video"
-          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <span class="text-sm text-primary-focus">Jun 12, 2022</span>
-        <h2 class="line-clamp-2 font-bold link link-hover text-base-100" >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur
-          debitis omnis voluptatum optio. Ad repellendus iusto quas laudantium,
-          officia similique obcaecati dignissimos? Nemo eveniet quod quam
-          numquam nostrum, vero odit!
-        </h2>
-        <p class="text-primary-focus line-clamp-3">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam
-          officia magnam velit error fuga, eos reprehenderit nulla fugit tempora
-          eaque, unde temporibus veniam facilis ducimus alias dicta aspernatur?
-          Nulla, cum!
-        </p>
-      </div>
-      <div class="space-y-2">
-        <img
-          class="rounded-md w-full aspect-video"
-          src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <span class="text-sm text-primary-focus">Jun 12, 2022</span>
-        <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur
-          debitis omnis voluptatum optio. Ad repellendus iusto quas laudantium,
-          officia similique obcaecati dignissimos? Nemo eveniet quod quam
-          numquam nostrum, vero odit!
-        </h2>
-        <p class="text-primary-focus line-clamp-3 ">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam
-          officia magnam velit error fuga, eos reprehenderit nulla fugit tempora
-          eaque, unde temporibus veniam facilis ducimus alias dicta aspernatur?
-          Nulla, cum!
-        </p>
-      </div>
+      {% endfor %}
     </div>
   </div>
+  {% endfor %}
 </div>
 {% endblock %}
