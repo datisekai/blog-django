@@ -113,13 +113,16 @@
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    const theme = localStorage.getItem("data-theme");
+    let theme = localStorage.getItem("data-theme");
 
-    if (theme) {
-      const documentHtml = document.querySelector("html");
-      documentHtml.setAttribute("data-theme", theme);
-      navbarMenu.setAttribute("value", theme);
+    if (!theme) {
+      theme = themes[0];
+      localStorage.setItem("data-theme", theme);
     }
+
+    const documentHtml = document.querySelector("html");
+    documentHtml.setAttribute("data-theme", theme);
+    navbarMenu.setAttribute("value", theme);
   });
 
   const getCategories = async () => {
@@ -166,6 +169,6 @@
   searchForm.onsubmit = (e) => {
     e.preventDefault();
     const inputSearch = document.getElementById("input-search");
-    window.location.href = `/search?q=${inputSearch.value}`
+    window.location.href = `/search?q=${inputSearch.value}`;
   };
 </script>
