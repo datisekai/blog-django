@@ -1,4 +1,9 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %} {% block extrahead %}
+<title>Home</title>
+<meta name="title" content="Home" />
+<meta name="description" content="Home" />
+{% endblock extrahead %}
+
 <div class="max-w-[1200px] mx-auto px-2 py-10">
   {% if first_category %}
   <div class="border-b-2 border-base-100 pb-4">
@@ -44,11 +49,13 @@
             <p class="text-sm uppercase text-primary-focus">
               {{blog.created_at|date:"M j Y"}}
             </p>
-           <a href="/detail/{{blog.slug}}"> <h2
-            class="font-bold text-lg line-clamp-2 link link-hover text-base-100"
-          >
-            {{blog.name}}
-          </h2></a>
+            <a href="/detail/{{blog.slug}}">
+              <h2
+                class="font-bold text-lg line-clamp-2 link link-hover text-base-100"
+              >
+                {{blog.name}}
+              </h2></a
+            >
           </div>
         </div>
         {% endfor %}

@@ -34,6 +34,8 @@ class Comments(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return self.content
+    class Meta:
+        default_permissions = []
   
 
 class Reacts(models.Model):
@@ -42,6 +44,8 @@ class Reacts(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return self.icon
+    class Meta:
+        default_permissions = []
    
 
 class Statistical(models.Model):

@@ -1,56 +1,49 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %} {% block extrahead %}
+<title>Search</title>
+<meta name="title" content="Search" />
+<meta name="description" content="Find blog" />
+{% endblock extrahead %}
 <div class="max-w-[1200px] mx-auto px-2 py-10">
-  <h1 class="text-base-100 text-lg md:text-xl mb-5">Kết quả tìm kiếm 
-    
-    {% if query %}
-        "{{query}}"
-    {% endif %}
-        
+  <h1 class="text-base-100 text-lg md:text-xl mb-5">
+    Kết quả tìm kiếm {% if query %} "{{query}}" {% endif %}
   </h1>
-  
 
-    
+  {% if results|length == 0 %}
+  <p class="text-base-100">Không tìm thấy kết quả phù hợp</p>
+  {% endif %} {% if results|length > 0 %}
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    {% for blog in results %}
     <div class="space-y-2">
       <img
         class="rounded-md w-full aspect-video"
-        src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+        src="/media/{{blog.thumbnail}}"
         alt=""
       />
-      <span class="text-sm text-primary-focus">Jun 12, 2022</span>
-      <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur
-        debitis omnis voluptatum optio. Ad repellendus iusto quas laudantium,
-        officia similique obcaecati dignissimos? Nemo eveniet quod quam numquam
-        nostrum, vero odit!
-      </h2>
-      <p class="text-primary-focus line-clamp-3">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam officia
-        magnam velit error fuga, eos reprehenderit nulla fugit tempora eaque,
-        unde temporibus veniam facilis ducimus alias dicta aspernatur? Nulla,
-        cum!
-      </p>
+      <span class="text-sm text-primary-focus"
+        >{{blog.created_at|date:"M j Y"}}</span
+      >
+      <a href="/detail/{{blog.slug}}"
+        ><h2 class="line-clamp-2 font-bold link link-hover text-base-100">
+          {{blog.name}}
+        </h2></a
+      >
+      <p class="text-primary-focus line-clamp-3">{{blog.description}}</p>
     </div>
-    <div class="space-y-2">
-      <img
-        class="rounded-md w-full aspect-video"
-        src="https://images.unsplash.com/photo-1679850281616-74e0a264971f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-        alt=""
-      />
-      <span class="text-sm text-primary-focus">Jun 12, 2022</span>
-      <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur
-        debitis omnis voluptatum optio. Ad repellendus iusto quas laudantium,
-        officia similique obcaecati dignissimos? Nemo eveniet quod quam numquam
-        nostrum, vero odit!
-      </h2>
-      <p class="text-primary-focus line-clamp-3">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam officia
-        magnam velit error fuga, eos reprehenderit nulla fugit tempora eaque,
-        unde temporibus veniam facilis ducimus alias dicta aspernatur? Nulla,
-        cum!
-      </p>
+    {% endfor %}
+  </div>
+  {% endif %} {% if total_page > 1 %}
+  <div class="flex items-center justify-center py-5">
+    <div class="btn-group">
+      {% if pre_page != None %}
+      <a href="/search?{{pre_page}}"><button class="btn">«</button></a>
+      {% endif%}
+      <button class="btn">Page {{current_page}}</button>
+
+      {% if next_page != None %}
+      <a href="/search?{{next_page}}"><button class="btn">»</button></a>
+      {% endif %}
     </div>
   </div>
+  {% endif %}
 </div>
 {% endblock content %}
