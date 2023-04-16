@@ -48,6 +48,8 @@
 
       <!-- <i class="fa-solid fa-heart"></i> -->
     </div>
+    {% if user.is_authenticated %}
+
     <div class="mt-4 flex w-full pb-2 border-b">
       <div>
         <div class="avatar">
@@ -56,23 +58,26 @@
           </div>
         </div>
       </div>
-      <div class="ml-4 flex-1 flex items-center">
-        <input
-          type="text"
-          placeholder="Type here"
-          id="comment-input"
-          class="input w-full max-w-lg input-bordered input-primary text-primary-content"
-        />
-        <button
-          id="send-comment"
-          data-id="{{data.id}}"
-          class="btn btn-primary ml-2 text-base-100"
-        >
-          SEND
-        </button>
-      </div>
+     
+     <div class="ml-4 flex-1 flex items-center">
+      <input
+        type="text"
+        placeholder="Type here"
+        id="comment-input"
+        class="input w-full max-w-lg input-bordered input-primary text-primary-content"
+      />
+      <button
+        id="send-comment"
+        data-id="{{data.id}}"
+        class="btn btn-primary ml-2 text-base-100"
+      >
+        SEND
+      </button>
     </div>
-    <div id="list-comments">
+    
+  </div>
+  {% endif %}
+  <div id="list-comments">
       <div
         role="status"
         class="space-y-8 mt-4 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center"
@@ -377,13 +382,18 @@
     btnSend.textContent = "Send";
   };
 
-  btnSend.onclick = () => {
-    addComment();
-  };
-
+  if(btnSend){
+    btnSend.onclick = () => {
+      addComment();
+    };
+  
+  }
   const handleDragReact = async(id) => {
     const csrftoken = getCookie("csrftoken");
-
+    if(!csrftoken || !current_username){
+      swal("Not authorized", "You must login", "warning");
+      return;
+    }
 
     const options = {
       method: "GET",
