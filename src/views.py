@@ -230,10 +230,6 @@ def detail(request, slug):
     return render(request, 'detail.html', context)
 
 
-def login(request):
-    return render(request, 'login.html')
-
-
 def logout_view(request):
     logout(request)
     return redirect('home')
@@ -315,15 +311,14 @@ def updateComment(request, id):
         if comment.author == request.user:
             comment.content = content
             comment.save()
-            return JsonResponse({"comment": model_to_dict(comment),"current_username": request.user.username}, safe=False)
-        return JsonResponse({"success": False, "message":"Not authorized", }, safe=False, status=401)
-     
-       
+            return JsonResponse({"comment": model_to_dict(comment), "current_username": request.user.username}, safe=False)
+        return JsonResponse({"success": False, "message": "Not authorized", }, safe=False, status=401)
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-def addLike(request,id):
+
+def addLike(request, id):
     try:
         user = request.user
         current_blog = get_object_or_404(Blog, id=id)
@@ -343,7 +338,7 @@ def addLike(request,id):
             new_react.icon = 'like'
             new_react.save()
             update = True
-        return JsonResponse({"update":update, "delete":delete}, safe=False)    
+        return JsonResponse({"update": update, "delete": delete}, safe=False)
 
     except Exception as e:
-        return JsonResponse({"error":str(e)}, status=500)
+        return JsonResponse({"error": str(e)}, status=500)
