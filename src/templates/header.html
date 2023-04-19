@@ -8,6 +8,7 @@
       transform: translate(-50%, -100%);
       opacity: 0;
     }
+
     to {
       opacity: 1;
       transform: translate(-50%, 0);
@@ -41,7 +42,7 @@
     </div>
 
     {% else %}
-    <a href="/admin/login">
+    <a href="/login">
       <button class="btn btn-primary text-base-100">Login</button>
     </a>
     {% endif %}
@@ -62,30 +63,18 @@
   
   </div>
 
-  <div
-    id="search-box"
-    class="fixed hidden bg-primary px-5 pt-2 pb-4 shadow-md rounded-box w-[80%] md:w-[400px] top-[5%] left-[50%] translate-x-[-50%]"
-  >
+  <div id="search-box"
+    class="fixed hidden bg-primary px-5 pt-2 pb-4 shadow-md rounded-box w-[80%] md:w-[400px] top-[5%] left-[50%] translate-x-[-50%]">
     <div class="relative">
       <form id="search-form">
         <div class="form-control w-full max-w-md">
           <label class="label">
-            <span class="label-text text-base-100"
-              >What is the blog name you want to find?</span
-            >
-            <span
-              id="search-box-close"
-              class="btn btn-xs btn-circle btn-base-100 absoluted top-0 right-0"
-            >
+            <span class="label-text text-base-100">What is the blog name you want to find?</span>
+            <span id="search-box-close" class="btn btn-xs btn-circle btn-base-100 absoluted top-0 right-0">
               <i class="fa-solid fa-xmark"></i>
             </span>
           </label>
-          <input
-            id="input-search"
-            type="text"
-            placeholder="Type here"
-            class="input input-bordered w-full max-w-md"
-          />
+          <input id="input-search" type="text" placeholder="Type here" class="input input-bordered w-full max-w-md" />
         </div>
       </form>
     </div>
@@ -163,8 +152,7 @@
 
     const html = categories.map(
       (item) => `<a href="/search?category=${item.id}"><h1
-        class="uppercase text-md hover:text-primary cursor-pointer transition-all ${
-          category == item.id ? "text-primary" : "text-base-100"
+        class="uppercase text-md hover:text-primary cursor-pointer transition-all ${category == item.id ? "text-primary" : "text-base-100"
         }"
       >
         ${item.name}
@@ -172,8 +160,7 @@
     );
 
     divCategory.innerHTML = [
-      `<a href='/'><h1 class="uppercase text-md hover:text-primary cursor-pointer transition-all ${
-        !category ? "text-primary" : "text-base-100"
+      `<a href='/'><h1 class="uppercase text-md hover:text-primary cursor-pointer transition-all ${!category ? "text-primary" : "text-base-100"
       }">Home</h1></a>`,
       ...html,
     ].join("");

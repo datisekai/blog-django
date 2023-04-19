@@ -1,0 +1,189 @@
+{% extends '../base.html' %}
+{% block content %}
+<div class="hero min-h-[calc(100vh-66px)]">
+    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div class="card-body">
+            {% csrf_token %}
+            <div class="form-control">
+                <label for="{{ form.username.id_for_label }}" class="required label label-text">Username</label>
+                <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username"
+                    maxlength="150" id="id_username" class="input input-bordered" placeholder="Type here">
+            </div>
+            <div class="form-control">
+                <label for="id_password" class="required label label-text">Password</label> <input type="password"
+                    name="password" autocomplete="current-password" id="id_password" class="input input-bordered"
+                    placeholder="Type here">
+            </div>
+            <div class="form-control">
+                <label for="id_confirmPassword" class="required label label-text">Confirm Password</label> <input
+                    type="password" name="confirmPassword" autocomplete="current-confirmPassword"
+                    id="id_confirmPassword" class="input input-bordered" placeholder="Type here">
+            </div>
+            <div class="form-control">
+                <label for="id_email" class="required label label-text">Email</label> <input type="email" name="email"
+                    autofocus="" autocapitalize="none" autocomplete="email" required="" id="id_email"
+                    class="input input-bordered" placeholder="Type here">
+            </div>
+            <div class="submit-row form-control mt-6">
+                <button class="btn btn-primary" id="idBtnSubmit">Register</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    "{% if user.is_authenticated %}"
+    window.location.href = window.location.origin
+    "{% endif %}"
+    const btnSubmit = document.getElementById('idBtnSubmit');
+    const txtUsername = document.getElementById('id_username');
+    const txtPassword = document.getElementById('id_password');
+    const txtConfirmPassword = document.getElementById('id_confirmPassword');
+    const txtEmail = document.getElementById('id_email');
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === name + "=") {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const resRegister = (isUse) => {
+        if (isUse == "Success") {
+            swal(
+                'Success',
+                'Register success!!!',
+                'success')
+            window.location.href = window.location.origin
+            return
+        }
+        if (isUse == "isUseUsername") {
+            swal(
+                'Error!',
+                'Username already in use!!!',
+                'error'
+            )
+            btnSubmit.disabled = false
+            return
+        }
+        if (isUse == "isUseEmail") {
+            swal(
+                'Error!',
+                'Email already in use!!!',
+                'error'
+            )
+            btnSubmit.disabled = false
+            return
+        }
+    }
+    const checkIsUse = async () => {
+        const username = txtUsername.value;
+        const password = txtPassword.value;
+        const email = txtEmail.value;
+        const payload = {
+            username,
+            password,
+            email
+        };
+        const csrftoken = getCookie("csrftoken");
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify(payload),
+        };
+        const response = await fetch(`user/add/`, options);
+        const data = await response.json();
+        resRegister(data.isUse);
+    }
+    const checkIsNumber = (str) => { return !isNaN(str) }
+    const checkEmail = (data) => {
+        const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])+/
+        if (data.match(reg)) return true
+    }
+    const fRegister = (e) => {
+        btnSubmit.disabled = true
+        e.preventDefault();
+        if (txtUsername.value == "" || txtPassword.value == ""
+            || txtConfirmPassword.value == "" || txtEmail.value == "") {// khác rỗng
+            swal(
+                'Warning!',
+                'You must enter the full field!!!',
+                'warning'
+            )
+        } else if (txtUsername.value.length > 150) {// tài khoản dưới 150 kí tự
+            swal(
+                'Warning!',
+                'Required. Username of 150 characters or fewer!!!',
+                'warning'
+            )
+        } else if (txtPassword.value.length < 8) {// mật khẩu từ 8 kí tự trở lên
+            swal(
+                'Warning!',
+                'Your password must contain at least 8 characters!!!',
+                'warning'
+            )
+        } else if (checkIsNumber(txtPassword.value)) {// kiểm tra mật khẩu có phải tất cả đều là số
+            swal(
+                'Warning!',
+                'Your password can’t be entirely numeric!!!',
+                'warning'
+            )
+        } else if (txtPassword.value.indexOf(txtUsername.value) != -1) {// kiểm tra mật khẩu có kí tự như tài khoản không
+            swal(
+                'Warning!',
+                'The password is too similar to the username!!!',
+                'warning'
+            )
+        }
+        else if (txtConfirmPassword.value !== txtPassword.value) {//kiểm tra xác nhận mk
+            swal(
+                'Warning!',
+                'The two password fields didn’t match!!!',
+                'warning'
+            )
+        }
+        else if (checkEmail(txtEmail.value) != true) {// kiểm tra định dạng email
+            swal(
+                'Warning!',
+                'Wrong email format!!!',
+                'warning'
+            )
+        } else {
+            checkIsUse();
+            return
+        }
+        btnSubmit.disabled = false
+    }
+    txtUsername.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            fRegister(e);
+        }
+    });
+    txtPassword.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            fRegister(e);
+        }
+    });
+    txtConfirmPassword.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            fRegister(e);
+        }
+    });
+    txtEmail.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            fRegister(e);
+        }
+    });
+    btnSubmit.onclick = (e) => {
+        fRegister(e);
+    };
+</script>
+{% endblock %}
