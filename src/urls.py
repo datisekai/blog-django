@@ -10,5 +10,12 @@ urlpatterns = [
     path('register', custom_register, name='custom_register'),
     path('search', search, name='search'),
     path('api/category/', getCategory, name='get-category'),
-    path('user/add/', isResister, name="addUser")
+    path('user/add/', isResister, name="addUser"),
+    path('forgetpassword', custom_forgetpassword, name="custom_forgetpassword"),
+    path('forgetpassword/sendemail/', forgetPassword,
+         name="custom_forgetpassword"),
+    path('change_password/<token>/', ChangePasswordToken,
+         name="ChangePasswordToken"),
+    path('change_password/<token>/changepassword/',
+         ChangePassword, name="ChangePassword")
 ]

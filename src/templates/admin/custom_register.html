@@ -13,21 +13,16 @@
                 <label for="id_password" class="required label label-text">Password</label> <input type="password"
                     name="password" autocomplete="current-password" id="id_password" class="input input-bordered"
                     placeholder="Type here">
-                <!-- <input type="hidden" name="next" value="/admin/login"> -->
             </div>
             <div class="form-control">
                 <label for="id_confirmPassword" class="required label label-text">Confirm Password</label> <input
                     type="password" name="confirmPassword" autocomplete="current-confirmPassword"
                     id="id_confirmPassword" class="input input-bordered" placeholder="Type here">
-                <!-- <input type="hidden" name="next" value="/admin/login"> -->
             </div>
             <div class="form-control">
                 <label for="id_email" class="required label label-text">Email</label> <input type="email" name="email"
                     autofocus="" autocapitalize="none" autocomplete="email" required="" id="id_email"
                     class="input input-bordered" placeholder="Type here">
-                <label class="label">
-                    <a href="/login" class="label-text-alt link link-hover">Login here</a>
-                </label>
             </div>
             <div class="submit-row form-control mt-6">
                 <button class="btn btn-primary" id="idBtnSubmit">Register</button>
@@ -36,6 +31,9 @@
     </div>
 </div>
 <script>
+    "{% if user.is_authenticated %}"
+    window.location.href = window.location.origin
+    "{% endif %}"
     const btnSubmit = document.getElementById('idBtnSubmit');
     const txtUsername = document.getElementById('id_username');
     const txtPassword = document.getElementById('id_password');
@@ -60,10 +58,10 @@
             'Error!',
             'Account already in use!!!',
             'error'
-        )) : (swal(
+        ), btnSubmit.disabled = false) : (swal(
             'Success',
             'Register success!!!',
-            'success'), window.location.href = "./"
+            'success'), window.location.href = window.location.origin
         )
     }
     const checkIsUse = async () => {
@@ -165,6 +163,7 @@
         }
     });
     btnSubmit.onclick = (e) => {
+        btnSubmit.disabled = true
         fRegister(e);
     };
 </script>
