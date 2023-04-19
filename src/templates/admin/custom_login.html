@@ -78,6 +78,7 @@
         resLogin(data.isLogin);
     }
     const fLogin = (e) => {
+        btnSubmit.disabled = true
         e.preventDefault();
         if (txtUsername.value == "" || txtPassword.value == "") {
             swal(
@@ -87,7 +88,9 @@
             )
         } else {
             checkIsLogin();
+            return
         }
+        btnSubmit.disabled = false
     }
     txtUsername.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
@@ -100,7 +103,6 @@
         }
     });
     btnSubmit.onclick = (e) => {
-        btnSubmit.disabled = true
         fLogin(e);
     };
 </script>

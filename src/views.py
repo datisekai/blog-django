@@ -64,11 +64,16 @@ def isResister(request):
             hashed_password = make_password(password)
             email = data['email']
 
-            isUse = False
-            if User.objects.filter(username=username).first():
-                isUse = True
+            isUse = "isUseUsername"
+            checkUser = User.objects.filter(username=username).first()
+            checkEmail = User.objects.filter(email=email).first()
+            if not checkUser:
+                if not checkEmail:
+                    isUse = "Success"
+                else:
+                    isUse = "isUseEmail"
 
-            if isUse == False:
+            if isUse == "Success":
                 user = User.objects.create(
                     username=username, password=hashed_password, email=email, is_staff=True)
                 group = Group.objects.get(name='User')
@@ -76,7 +81,7 @@ def isResister(request):
                 user = authenticate(
                     request, username=username, password=password)
                 login(request, user)
-        return JsonResponse({"isUse": isUse})
+            return JsonResponse({"isUse": isUse})
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
@@ -93,14 +98,11 @@ def ChangePassword(request, token):
             data_string = raw_data.decode('utf-8')
             data = json.loads(data_string)
 
-            # resToken = data['token']
             password = data['password']
-            isChangePassword = ""
-            isNotToken = False
+            isChangePassword = "Fail"
             users = User.objects.all()
             for item in users:
                 if default_token_generator.check_token(item, token):
-                    isNotToken = True
                     if str(password).find(str(item.username)) == -1:
                         isChangePassword = "Success"
                         item.set_password(password)
@@ -112,8 +114,6 @@ def ChangePassword(request, token):
                     else:
                         isChangePassword = "Similar"
                         break
-            if isNotToken == False:
-                isChangePassword = "Fail"
             return JsonResponse({"isChangePassword": isChangePassword})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)

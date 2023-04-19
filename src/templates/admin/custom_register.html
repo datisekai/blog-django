@@ -54,15 +54,32 @@
         return cookieValue;
     }
     const resRegister = (isUse) => {
-        isUse ? (swal(
-            'Error!',
-            'Account already in use!!!',
-            'error'
-        ), btnSubmit.disabled = false) : (swal(
-            'Success',
-            'Register success!!!',
-            'success'), window.location.href = window.location.origin
-        )
+        if (isUse == "Success") {
+            swal(
+                'Success',
+                'Register success!!!',
+                'success')
+            window.location.href = window.location.origin
+            return
+        }
+        if (isUse == "isUseUsername") {
+            swal(
+                'Error!',
+                'Username already in use!!!',
+                'error'
+            )
+            btnSubmit.disabled = false
+            return
+        }
+        if (isUse == "isUseEmail") {
+            swal(
+                'Error!',
+                'Email already in use!!!',
+                'error'
+            )
+            btnSubmit.disabled = false
+            return
+        }
     }
     const checkIsUse = async () => {
         const username = txtUsername.value;
@@ -92,6 +109,7 @@
         if (data.match(reg)) return true
     }
     const fRegister = (e) => {
+        btnSubmit.disabled = true
         e.preventDefault();
         if (txtUsername.value == "" || txtPassword.value == ""
             || txtConfirmPassword.value == "" || txtEmail.value == "") {// khác rỗng
@@ -140,7 +158,9 @@
             )
         } else {
             checkIsUse();
+            return
         }
+        btnSubmit.disabled = false
     }
     txtUsername.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
@@ -163,7 +183,6 @@
         }
     });
     btnSubmit.onclick = (e) => {
-        btnSubmit.disabled = true
         fRegister(e);
     };
 </script>
