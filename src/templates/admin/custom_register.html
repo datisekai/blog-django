@@ -3,30 +3,32 @@
 <div class="hero min-h-[calc(100vh-66px)]">
     <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <div class="card-body">
-            {% csrf_token %}
-            <div class="form-control">
-                <label for="{{ form.username.id_for_label }}" class="required label label-text">Username</label>
-                <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username"
-                    maxlength="150" id="id_username" class="input input-bordered" placeholder="Type here">
-            </div>
-            <div class="form-control">
-                <label for="id_password" class="required label label-text">Password</label> <input type="password"
-                    name="password" autocomplete="current-password" id="id_password" class="input input-bordered"
-                    placeholder="Type here">
-            </div>
-            <div class="form-control">
-                <label for="id_confirmPassword" class="required label label-text">Confirm Password</label> <input
-                    type="password" name="confirmPassword" autocomplete="current-confirmPassword"
-                    id="id_confirmPassword" class="input input-bordered" placeholder="Type here">
-            </div>
-            <div class="form-control">
-                <label for="id_email" class="required label label-text">Email</label> <input type="email" name="email"
-                    autofocus="" autocapitalize="none" autocomplete="email" required="" id="id_email"
-                    class="input input-bordered" placeholder="Type here">
-            </div>
-            <div class="submit-row form-control mt-6">
-                <button class="btn btn-primary" id="idBtnSubmit">Register</button>
-            </div>
+            <form id="register-form">
+                {% csrf_token %}
+                <div class="form-control">
+                    <label for="{{ form.username.id_for_label }}" class="required label label-text">Username</label>
+                    <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username"
+                        maxlength="150" id="id_username" class="input input-bordered" placeholder="Type here">
+                </div>
+                <div class="form-control">
+                    <label for="id_password" class="required label label-text">Password</label> <input type="password"
+                        name="password" autocomplete="current-password" id="id_password" class="input input-bordered"
+                        placeholder="Type here">
+                </div>
+                <div class="form-control">
+                    <label for="id_confirmPassword" class="required label label-text">Confirm Password</label> <input
+                        type="password" name="confirmPassword" autocomplete="current-confirmPassword"
+                        id="id_confirmPassword" class="input input-bordered" placeholder="Type here">
+                </div>
+                <div class="form-control">
+                    <label for="id_email" class="required label label-text">Email</label> <input type="email"
+                        name="email" autofocus="" autocapitalize="none" autocomplete="email" id="id_email"
+                        class="input input-bordered" placeholder="Type here">
+                </div>
+                <div class="submit-row form-control mt-6">
+                    <button class="btn btn-primary" id="idBtnSubmit">Register</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -39,6 +41,7 @@
     const txtPassword = document.getElementById('id_password');
     const txtConfirmPassword = document.getElementById('id_confirmPassword');
     const txtEmail = document.getElementById('id_email');
+
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== "") {
@@ -108,9 +111,7 @@
         const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])+/
         if (data.match(reg)) return true
     }
-    const fRegister = (e) => {
-        btnSubmit.disabled = true
-        e.preventDefault();
+    const actionRegister = () => {
         if (txtUsername.value == "" || txtPassword.value == ""
             || txtConfirmPassword.value == "" || txtEmail.value == "") {// khác rỗng
             swal(
@@ -157,33 +158,15 @@
                 'warning'
             )
         } else {
+            btnSubmit.disabled = true
             checkIsUse();
             return
         }
         btnSubmit.disabled = false
     }
-    txtUsername.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            fRegister(e);
-        }
-    });
-    txtPassword.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            fRegister(e);
-        }
-    });
-    txtConfirmPassword.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            fRegister(e);
-        }
-    });
-    txtEmail.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            fRegister(e);
-        }
-    });
     btnSubmit.onclick = (e) => {
-        fRegister(e);
+        e.preventDefault()
+        actionRegister();
     };
 </script>
 {% endblock %}
