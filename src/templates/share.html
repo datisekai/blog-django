@@ -1,0 +1,84 @@
+<div class="flex space-x-1" id="shares">
+
+</div>
+
+{% if data %}
+<script>
+  let title = "{{data.name}}";
+</script>
+{% endif %}
+
+<script>
+  const copyToClipboard = (text) => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text);
+        return toast.success("Copy liên kết thành công");
+      } else {
+        let textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        return new Promise((res, rej) => {
+          document.execCommand("copy") ? res() : rej();
+          textArea.remove();
+        });
+      }
+    } catch (error) {}
+  };
+  const shares = [
+    {
+      title: "Facebook",
+      icon: '<i class="text-xl md:text-2xl fa-brands fa-facebook"></i>',
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        window.location.href
+      )}&t=${title || "Không có"}`,
+    },
+    {
+      title: "Instagram",
+      icon: '   <i class="text-xl md:text-2xl fa-brands fa-square-instagram"></i>',
+      href: `https://www.instagram.com/?url=${encodeURIComponent(
+        window.location.href
+      )}`,
+    },
+    {
+      title: "Linkedin",
+      icon: '  <i class="text-xl md:text-2xl fa-brands fa-linkedin"></i>',
+      href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
+        window.location.href
+      )}&title=${encodeURIComponent(title)}`,
+    },
+    {
+      title: "Mail",
+      icon: '<i class="text-xl md:text-2xl fa-solid fa-envelope"></i>',
+      href: `mailto:?subject=${encodeURIComponent(title)}&body=${
+        window.location.href
+      }`,
+    },
+  ];
+  const divShares = document.getElementById("shares");
+  divShares.innerHTML = shares
+    .map(
+      (
+        item
+      ) => `<a href='${item.href}' target='_blank'> <button class="btn btn-outline btn-primary btn-sm md:btn-md text-base-100" title="${item.title}">
+   ${item.icon}
+  </button></a>`
+    )
+    .join("");
+
+  divShares.innerHTML += ` <button id="share-link" class="btn btn-outline btn-primary btn-sm md:btn-md text-base-100" title="Link">
+    <i class="text-xl md:text-2xl fa-solid fa-link"></i>
+  </button>`;
+
+  const btnShareLink = document.getElementById("share-link");
+  btnShareLink.onclick = () => {
+    copyToClipboard(window.location.href);
+    swal("Good job!", "Copy successfull", "success");
+  };
+</script>

@@ -1,4 +1,426 @@
-{% extends 'base.html' %} {% block content %}
-<p>detail</p>
+{% extends 'base.html' %} {% block content %} {% block extrahead %}
+<title>{{data.name}}</title>
+<meta name="title" content="{{data.name}}" />
+<meta name="description" content="{{data.description}}" />
 
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{data.name}}" />
+<meta property="og:description" content="{{data.description}}" />
+<meta property="og:image" content="/media/{{data.thumbnai}}" />
+
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="{{data.name}}" />
+<meta property="twitter:description" content="{{data.description}}" />
+<meta property="twitter:image" content="/media/{{data.thumbnai}}" />
+{% endblock extrahead %}
+
+<div class="max-w-[1200px] text-base-100 mx-auto px-2 py-10">
+  <div class="leading-8">
+    <h1 class="text-xl font-bold md:text-2xl">{{data.name}}</h1>
+    <p>{{data.description}}</p>
+    <p class="mt-4">{{data.html|safe}}</p>
+  </div>
+  <div class='flex mt-8 items-center justify-between'>
+    <h2 class="text-lg md:text-xl">Share</h2>
+    {% include 'share.html' %}
+  </div>
+  <div class="mt-8">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg md:text-xl">
+        Top Comment (<span id="length-comment">~</span>)
+      </h2>
+      <div>
+        <div
+          class="btn btn-sm md:btn-md btn-primary text-base-100"
+          onclick="handleDragReact({{data.id}})"
+          title="Drag React"
+          id='drag-react'
+        >
+     
+          {% comment %} <i class="text-2xl fa-solid fa-heart"></i> {% endcomment %}
+        
+        <i class="text-xl md:text-2xl fa-regular fa-heart"></i>
+      
+        
+        </div>
+        <span className="text-base-100 text-xl" id="react">0</span> 
+      </div>
+
+      <!-- <i class="fa-solid fa-heart"></i> -->
+    </div>
+    {% if user.is_authenticated %}
+
+    <div class="mt-4 flex w-full pb-2 border-b">
+      <div>
+        <div class="avatar">
+          <div class="w-10 rounded-full">
+            <img src="https://ui-avatars.com/api/?name={{user.username}}" />
+          </div>
+        </div>
+      </div>
+     
+     <div class="ml-4 flex-1 flex items-center">
+      <input
+        type="text"
+        placeholder="Type here"
+        id="comment-input"
+        class="input w-full max-w-lg input-bordered input-primary text-primary-content"
+      />
+      <button
+        id="send-comment"
+        data-id="{{data.id}}"
+        class="btn btn-primary ml-2 text-base-100"
+      >
+        SEND
+      </button>
+    </div>
+    
+  </div>
+  {% endif %}
+  <div id="list-comments">
+      <div
+        role="status"
+        class="space-y-8 mt-4 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center"
+      >
+        <div
+          class="flex items-center justify-center w-full h-10 bg-gray-300 rounded sm:w-10 dark:bg-gray-700"
+        >
+          <svg
+            class="w-10 h-10 rounded-full text-gray-200"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"
+            />
+          </svg>
+        </div>
+        <div class="w-full">
+          <div
+            class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+          ></div>
+          <div
+            class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[480px] mb-2.5"
+          ></div>
+        </div>
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div class="flex items-center">
+      <button id="view-more" class="btn gap-2">
+        More
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <button id="view-collapse" class="hidden btn gap-2">
+        Collapse
+        <i class="fa-solid fa-chevron-up"></i>
+      </button>
+    </div>
+  </div>
+
+  
+
+  {% if recommend_blogs|length > 0 %}
+  <div class="mt-8">
+    <h1 class="font-bold text-xl text-base-100 uppercase">Recommends</h1>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {% for blog in recommend_blogs %}
+      <div class="space-y-2">
+        <img
+          class="object-cover rounded-md w-full aspect-video"
+          src="/media/{{blog.thumbnail}}"
+          alt=""
+        />
+        <span class="text-sm text-primary-focus"
+          >{{blog.created_at|date:"M j Y"}}</span
+        >
+        <a href="/detail/{{blog.slug}}">
+          <h2 class="line-clamp-2 font-bold link link-hover text-base-100">
+            {{blog.name}}
+          </h2></a
+        >
+        <p class="text-primary-focus line-clamp-3">{{blog.description}}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+
+  {% if user %}
+  let current_username = "{{user.username}}"
+  let current_userid = "{{user.id}}"
+  {% endif %}
+
+  const currentUrl = window.location.href;
+  const parts = currentUrl.split("/");
+  const slug = parts[parts.length - 2];
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  let start = 0;
+  const limit = 5;
+  let step = start + limit;
+  let listComment = [];
+  let listReact = []
+
+  const btnMore = document.getElementById("view-more");
+  const btnCollapse = document.getElementById("view-collapse");
+  const divReact = document.getElementById('react')
+ 
+
+  const renderReact = () => {
+    const divDragReact = document.getElementById('drag-react')
+    const isExist = listReact.some(item => item.author_id == +current_userid);
+
+    divDragReact.innerHTML = isExist ? ` <i class="text-xl md:text-2xl fa-solid fa-heart"></i>` : ` <i class="text-xl md:text-2xl fa-regular fa-heart"></i>` 
+    divReact.textContent = listReact.length
+  }
+
+  const renderComment = () => {
+    document.getElementById("length-comment").textContent = listComment.length;
+    if (listComment.length <= 5) {
+      btnMore.style.display = "none";
+    }
+    const divComments = document.getElementById("list-comments");
+
+    divComments.innerHTML = listComment
+      .slice(start, step)
+      .map((item,index) => {
+        const date = new Date(item.created_at);
+        const formattedDate = date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+
+        return `<div class="mt-4 flex w-full item-comment">
+      <div>
+        <div class="avatar">
+          <div class="w-10 rounded-full">
+            <img src="https://ui-avatars.com/api/?name=${item.author_username}" />
+          </div>
+        </div>
+      </div>
+      <div class="ml-4 flex-1 flex justify-between tool-comment">
+       <div>
+        <div class="flex items-center">
+          <h4 class="font-bold">@${item.author_username}</h4>
+          <span class="ml-4">${formattedDate}</span>
+        </div>
+        <p>
+          ${item.content}
+        </p>
+       </div>
+
+     ${current_username == item.author_username ? ` <div class='flex items-center space-x-2'>
+      <button onclick="viewEditComment(${item.id})" class='btn btn-primary btn-sm'>
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+      <button onclick="deleteComment(${item.id})" class='btn btn-primary btn-sm'>
+        <i class="fa-solid fa-trash"></i>
+      </button>
+
+     </div>` : ''}
+
+      </div>
+    </div>`;
+      })
+      .join("");
+  };
+
+  const viewEditComment = (id) => {
+    const index = listComment.findIndex(item => item.id === id);
+    const divComments = document.querySelectorAll('.item-comment');
+    const currentComment = divComments[index];
+    const tool = currentComment.querySelector('.tool-comment');
+    tool.innerHTML = `
+    <div class='flex items-center'>
+      <input type="text" placeholder="Type here" id="input-edit-comment-${id}" value="${listComment[index].content}" class="text-primary-content input-sm input input-bordered w-full max-w-xs" />
+      <button class='btn btn-primary btn-sm ml-2' id="current-edit-comment-${id}" onclick="updateComment(${id})">Update<Button>
+        <button class='btn btn-primary btn-sm ml-2'  onclick="renderComment()">Cancel<Button></div>
+    `
+  }
+
+  const updateComment = async(id) => {
+    const inputComment = document.getElementById(`input-edit-comment-${id}`)
+    const btnUpdateComment = document.getElementById(`current-edit-comment-${id}`)
+    const content = inputComment.value
+    if(content.trim().length == 0){
+      return;
+    }
+    const csrftoken = getCookie("csrftoken");
+    const payload = {
+      content,
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify(payload),
+    };
+
+
+    btnUpdateComment.disabled = true;
+    btnUpdateComment.textContent = "Loading...";
+  try{
+    const response = await fetch(`/api/comment/update/${id}`, options);
+    const data = await response.json();
+    listComment = listComment.map(item => item.id === id ? {...data.comment, author_username:data.current_username} : item)
+    btnUpdateComment.disabled = false;
+  }catch(err){
+    swal("An error", "An error occurred, please try again later", "error");
+  }
+
+  renderComment()
+
+  }
+
+  const deleteComment = async(id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        fetch(`/api/comment/delete/${id}`).then(data => {
+          listComment = listComment.filter(item => item.id !== id)
+          renderComment()
+          swal("Good job!", "Delete successfull", "success");
+
+        }).catch(() => {
+          swal("An error", "An error occurred, please try again later", "error");
+        })
+      }
+
+    });
+
+  }
+
+  btnMore.onclick = () => {
+    step += limit;
+    renderComment();
+    if (step >= listComment.length) {
+      btnMore.style.display = "none";
+      btnCollapse.style.display = "flex";
+    }
+  };
+
+  btnCollapse.onclick = () => {
+    step = 5;
+    renderComment();
+    btnMore.style.display = "flex";
+    btnCollapse.style.display = "none";  
+  };
+
+  const getComments = async () => {
+    const response = await fetch(`/api/comment/${slug}`);
+    const data = await response.json();
+    listComment = data.comments;
+    listReact = data.reacts;
+    renderReact()
+    renderComment();
+  };
+  const btnSend = document.getElementById("send-comment");
+
+  const addComment = async () => {
+    const csrftoken = getCookie("csrftoken");
+    const inputContent = document.getElementById("comment-input");
+    const content = inputContent.value;
+    if(content.trim().length == 0){
+      return;
+    }
+    const payload = {
+      content,
+      blog_id: btnSend.getAttribute("data-id"),
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify(payload),
+    };
+
+    btnSend.disabled = true;
+    btnSend.textContent = "Loading...";
+    const response = await fetch("/api/comment", options);
+    const data = await response.json();
+    inputContent.value = "";
+
+    listComment = [
+      { ...data.comment, author_username: data.current_username },
+      ...listComment,
+    ];
+    renderComment();
+    btnSend.disabled = false;
+    btnSend.textContent = "Send";
+  };
+
+  if(btnSend){
+    btnSend.onclick = () => {
+      addComment();
+    };
+  
+  }
+  const handleDragReact = async(id) => {
+    const csrftoken = getCookie("csrftoken");
+    if(!csrftoken || !current_username){
+      swal("Not authorized", "You must login", "warning");
+      return;
+    }
+
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+    };
+
+    if(listReact.some(item => item.author_id == current_userid)){
+      listReact = listReact.filter(item => item.author_id != current_userid)
+    }else{
+      listReact = [...listReact, {author_id:current_userid, blog_id:id}]
+    }
+    
+    renderReact()
+    try {
+      const response = await fetch(`/api/react/${id}`, options);
+    const data = await response.json()
+   
+    } catch (error) {
+      swal("An error", "An error occurred, please try again later", "error");
+      getComments()
+    }
+  }
+
+
+  getComments();
+</script>
 {% endblock content %}

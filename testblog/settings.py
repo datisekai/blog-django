@@ -56,7 +56,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "testblog.urls"
-
+LOGOUT_REDIRECT_URL = "/login"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -69,6 +69,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+           
         },
     },
 ]
@@ -110,32 +111,32 @@ DATABASES = {
     #             'host': 'mongodb+srv://datisekai:yvCd9dQgXWCTEcmk@cluster0.fh43eys.mongodb.net/Cluster0?retryWrites=true&w=majority'
     #     }
     # }
-    # 'default': {  
-    #     'ENGINE': 'django.db.backends.mysql',  
-    #     'NAME': 'testblog',  
-    #     'USER': '2posdz5b9ydr74wc5p2w',  
-    #     'PASSWORD': 'pscale_pw_kIABprjV1AecJBJZWaQ9ujUWT0uIWbpBjN948LhlBLk',  
-    #     'HOST': 'aws.connect.psdb.cloud',  
-    #     'PORT': '3306',  
-    #     'OPTIONS': {  
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'testblog',
+    #     'USER': '2posdz5b9ydr74wc5p2w',
+    #     'PASSWORD': 'pscale_pw_kIABprjV1AecJBJZWaQ9ujUWT0uIWbpBjN948LhlBLk',
+    #     'HOST': 'aws.connect.psdb.cloud',
+    #     'PORT': '3306',
+    #     'OPTIONS': {
     #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
     #         'ssl': {
     #             'rejectUnauthorized': True,
-    #         },  
+    #         },
     #         'charset': 'utf8mb4'
-    #     }  
-    # }  
-    # 'default': {  
-    #     'ENGINE': 'django.db.backends.mysql',  
-    #     'NAME': 'testblog',  
-    #     'USER': 'root',  
-    #     'PASSWORD': '',  
-    #     'HOST': 'localhost',  
-    #     'PORT': '3306',  
-    #     'OPTIONS': {  
+    #     }
+    # }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'testblog',
+    #     'USER': 'root',
+    #     'PASSWORD': '',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    #     'OPTIONS': {
     #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-    #     }  
-    # }  
+    #     }
+    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'testblog_142r',
@@ -145,8 +146,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-
 
 
 # Password validation
@@ -194,4 +193,13 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 STATIC_ROOT = 'static/'
 
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_ROOT = 'media/'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'haiduong09830@gmail.com'
+EMAIL_HOST_PASSWORD = 'cndsprxikqwvazes'

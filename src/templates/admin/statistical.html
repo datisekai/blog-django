@@ -2,7 +2,7 @@
 {% block extrahead %}
 <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.tailwindcss.com"></script>
-
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 {% endblock %}
 
 
@@ -11,28 +11,29 @@
     <h1 class="text-5xl font-bold text-[#447e9b] my-[1rem]">Statistical</h1>
     <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:lg:grid-cols-3">
         <div class="flex justify-between items-center bg-[#79aec8] rounded p-4 h-[140px]">
-            <div class="">icon</div>
+            <div class="text-6xl"><ion-icon name="people-outline"></ion-icon></div>
             <div class="flex flex-col items-end">
-                <h3 class="text-2xl text-[#447e9b]">4662</h3>
-                <h4 class="text-md text-bold text-white">Number of Users</h4>
+                <h3 class="text-2xl text-[#447e9b]">{{user_count}}</h3>
+                <h4 class="text-md text-bold text-white">Number of User</h4>
             </div>
         </div>
         <div class="flex justify-between items-center bg-[#79aec8] rounded p-2 h-[140px]">
-            <div class="">icon</div>
+            <div class="text-6xl"><ion-icon name="newspaper-outline"></ion-icon></div>
             <div class="flex flex-col items-end">
-                <h3 class="text-2xl text-[#447e9b]">4662</h3>
-                <h4 class="text-md text-bold text-white">Number of Users</h4>
+                <h3 class="text-2xl text-[#447e9b]">{{post_count}}</h3>
+                <h4 class="text-md text-bold text-white">Number of Post</h4>
             </div>
         </div>
         <div class="flex justify-between items-center bg-[#79aec8] rounded p-2 h-[140px]">
-            <div class="">icon</div>
+            <div class="text-6xl"><ion-icon name="library-outline"></ion-icon></div>
             <div class="flex flex-col items-end">
-                <h3 class="text-2xl text-[#447e9b]">4662</h3>
-                <h4 class="text-md text-bold text-white">Number of Users</h4>
+                <h3 class="text-2xl text-[#447e9b]">{{category_count}}</h3>
+                <h4 class="text-md text-bold text-white">Number of Category</h4>
             </div>
         </div>
     </div>
-    <div class="overflow-x-auto mt-[3rem]">
+
+    <div class="mt-[3rem]">
         <table class="table table-compact w-full">
             <thead>
                 <tr>
@@ -46,69 +47,18 @@
                 </tr>
             </thead>
             <tbody>
+                {% for post in post_Statistical %}
                 <tr>
                     <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
+                    <td class="break-words"><a href='/detail/{{post.slug}}'>{{post.name}}</a></td>
+                    <td>{{post.author}}</td>
+                    <td>{{post.category}}</td>
+                    <td>{{post.total_reacts}}</td>
+                    <td>{{post.total_comments}}</td>
+                    <td><a href='/detail/{{post.slug}}'>GO!</a></td>
                 </tr>
-                <tr>
-                    <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>Stop coding, take time to sleep</td>
-                    <td>Thiên Đạt</td>
-                    <td>Code</td>
-                    <td>1121</td>
-                    <td>1000</td>
-                    <td>Go!</td>
-                </tr>
+
+                {% endfor %}
 
             </tbody>
         </table>
