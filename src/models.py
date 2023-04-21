@@ -43,8 +43,16 @@ class Reacts(models.Model):
     def __str__(self) -> str:
         return self.icon
    
+class StatisticalBase(models.base.ModelBase):
+    def save(self, *args, **kwargs):
+        # do nothing
+        pass
 
-class Statistical(models.Model):
+    def delete(self, *args, **kwargs):
+        # do nothing
+        pass
+
+class Statistical(models.Model,metaclass=StatisticalBase):
     class Meta:
         managed = False
-        verbose_name_plural = "Statisticals"
+        verbose_name_plural = 'Statisticals'
