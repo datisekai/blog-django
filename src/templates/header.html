@@ -20,7 +20,7 @@
   class="flex items-center justify-between  border-b-2 py-2 border-base-100 mx-auto max-w-[1200px] w-full px-2"
 >
   <div class="flex items-center space-x-4 ">
-
+ 
 
     {% if user.is_authenticated %}
     <div class="dropdown  cursor-pointer">
@@ -52,14 +52,23 @@
     </div>
   </div>
   <div class="flex items-center space-x-2">
-    <button id="btn-search" class="btn btn-circle btn-primary">
-      <i class="text-md md:text-lg fa-solid fa-magnifying-glass"></i>
+    <button id="btn-search" class="btn btn-circle btn-ghost text-neutral-content md:btn-primary">
+      <i class="text-lg md:text-lg fa-solid fa-magnifying-glass"></i>
     </button>
     <select
       id="navbar-menu"
       class="select capitalize hidden md:block select-primary max-w-xs"
     ></select>
+    <div id="btn-menu" class='flex md:hidden btn btn-ghost text-neutral-content btn-circle'>
+      <i class="fa-solid fa-bars text-lg"></i>
+    </div>
 
+  <div class="menu">
+      <div class="fixed hidden inset-0 bg-[rgba(0,0,0,0.6)] z-1" id="overlay"></div>
+      <div class="fixed py-5 transition-transform translate-x-[-100%] left-0 top-0 bottom-0 w-[60%] bg-accent text-accent-content z-2" id="menu-list">
+        <div class="px-4 py-2">Loading...</div>
+      </div>
+  </div>
   
   </div>
 
@@ -113,6 +122,13 @@
     "coffee",
     "winter",
   ];
+
+  //Drawer
+  const menuOverlay = document.getElementById('overlay')
+  const menuList = document.getElementById('menu-list')
+  const btnMenu = document.getElementById('btn-menu')
+  //END Drawer
+
   const navbarMenu = document.getElementById("navbar-menu");
   if (navbarMenu) {
     const theme = localStorage.getItem("data-theme");
@@ -159,10 +175,25 @@
       </h1></a>`
     );
 
+    const html2 = categories.map(
+      (item) => `<a href="/search?category=${item.id}" ><h1
+        class="uppercase text-center text-md hover:text-primary py-2 px-4 cursor-pointer transition-all ${category == item.id ? "text-primary" : "text-base-100"
+        }"
+      >
+        ${item.name}
+      </h1></a>`
+    );
+
     divCategory.innerHTML = [
       `<a href='/'><h1 class="uppercase text-md hover:text-primary cursor-pointer transition-all ${!category ? "text-primary" : "text-base-100"
       }">Home</h1></a>`,
       ...html,
+    ].join("");
+
+    menuList.innerHTML = [
+      `<a href='/' ><h1 class="text-center uppercase py-2 px-4 text-md hover:text-primary cursor-pointer transition-all ${!category ? "text-primary" : "text-base-100"
+      }">Home</h1></a>`,
+      ...html2,
     ].join("");
   };
   getCategories();
@@ -189,4 +220,16 @@
     const inputSearch = document.getElementById("input-search");
     window.location.href = `/search?q=${inputSearch.value}`;
   };
+
+ 
+  btnMenu.onclick = () => {
+    menuOverlay.style.display = 'block'
+    menuList.style.transform = 'translateX(0)'
+  }
+
+  menuOverlay.onclick = () => {
+    menuOverlay.style.display = 'none'
+    menuList.style.transform = 'translateX(-100%)'
+  }
+
 </script>

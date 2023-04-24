@@ -33,11 +33,10 @@
         </div>
     </div>
 
-    <div class="mt-[3rem]">
+    <div class="mt-[3rem] overflow-x-auto">
         <table class="table table-compact w-full">
             <thead>
                 <tr>
-                    <th></th>
                     <th>Title</th>
                     <th>Author</th>
                     <th>Category</th>
@@ -49,8 +48,7 @@
             <tbody>
                 {% for post in post_Statistical %}
                 <tr>
-                    <th></th>
-                    <td class="break-words"><a href='/detail/{{post.slug}}'>{{post.name}}</a></td>
+                    <td class="min-w-[12rem] max-w-[20rem] whitespace-normal"><a href='/detail/{{post.slug}}'>{{post.name}}</a></td>
                     <td>{{post.author}}</td>
                     <td>{{post.category}}</td>
                     <td>{{post.total_reacts}}</td>
